@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="module">
+        import { signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js';
+        import { auth } from './firebase.js';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginForm = document.getElementById('login-form');
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            const errorMessage = document.getElementById('error-message');
+
+            loginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const email = emailInput.value;
+                const password = passwordInput.value;
+
+                try {
+                    await signInWithEmailAndPassword(auth, email, password);
+                    console.log('Login exitoso');
+                    window.location.href = '/panel.html';
+                } catch (error) {
+                    errorMessage.textContent = 'Error al iniciar sesión: ' + error.message;
+                    errorMessage.classList.remove('hidden');
+                }
+            });
+        });
+    </script>
+</head>
+<body class="flex items-center justify-center min-h-screen bg-[#D6C7A1]">
+    <div class="bg-white p-8 rounded-2xl shadow-lg max-w-sm w-full text-center border border-gray-300">
+        <h2 class="text-2xl font-semibold text-gray-700 mb-4">¡Inicia sesión!</h2>
+        <img src="/logo.png" alt="Logo" class="mx-auto w-20 h-20 mb-4" />
+        <form id="login-form" class="space-y-4">
+            <div class="text-left">
+                <input type="email" id="email" placeholder="Correo electrónico" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" required>
+            </div>
+            <div class="text-left">
+                <input type="password" id="password" placeholder="Contraseña" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" required>
+            </div>
+            <p id="error-message" class="text-red-500 text-sm hidden"></p>
+            <button type="submit" class="w-full bg-[#004b53] hover:bg-[#003b42] text-white font-semibold py-2 rounded-lg transition duration-300">
+                Iniciar Sesión
+            </button>
+            <p class="text-sm text-gray-600 mt-2">
+                ¿No tienes cuenta? <a href="/register.html" class="text-blue-500 hover:underline">Regístrate →</a>
+            </p>
+        </form>
+    </div>
+</body>
+</html>
+
